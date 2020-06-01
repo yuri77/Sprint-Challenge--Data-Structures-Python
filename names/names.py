@@ -13,14 +13,67 @@ f.close()
 duplicates = []  # Return the list of duplicates in this data structure
 
 # Replace the nested for loops below with your improvements
-for name_1 in names_1:
-    for name_2 in names_2:
-        if name_1 == name_2:
-            duplicates.append(name_1)
+# for name_1 in names_1:
+#     for name_2 in names_2:
+#         if name_1 == name_2:
+#             duplicates.append(name_1)
+
+
+class BSTNode:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+    def insert(self, value):
+        if value < self.value:
+            if not self.left:
+                self.left = BSTNode(value)
+            else:
+                self.left.insert(value)
+        else:
+            if not self.right:
+                self.right = BSTNode(value)
+            else:
+                self.right.insert(value)
+
+    def contains(self, target):
+        if target == self.value:
+            return True
+        if target < self.value:
+            # go left if left is a BSTNode
+            if not self.left:
+                return False
+            return self.left.contains(target)
+        else:
+            # go right if right is a BSTNode
+            if not self.right:
+                return False
+            return self.right.contains(target)
+
+
+# Initialize the binary tree with a empty node
+bst = BSTNode("empty_Node")
+for name in names_1:
+    bst.insert(name)
+
+for name in names_2:
+    if bst.contains(name):
+        duplicates.append(name)
+
 
 end_time = time.time()
-print (f"{len(duplicates)} duplicates:\n\n{', '.join(duplicates)}\n\n")
-print (f"runtime: {end_time - start_time} seconds")
+print(f"{len(duplicates)} duplicates:\n\n{', '.join(duplicates)}\n\n")
+print(f"runtime: {end_time - start_time} seconds")
+
+
+'''
+64 duplicates
+runtime of the nested loop is : runtime: 4.860848903656006 seconds (On^2)
+
+runtime of the bst is  0.08374977111816406 seconds O NlogN
+
+'''
 
 # ---------- Stretch Goal -----------
 # Python has built-in tools that allow for a very efficient approach to this problem
